@@ -61,6 +61,9 @@ jobs:
             - name: Build code
               run: bun run build
 
+            - name: Force add built JS files
+              run: git add -f **/*.js
+
             - name: Commit built files
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
