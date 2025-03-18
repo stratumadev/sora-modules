@@ -1,4 +1,4 @@
-async function searchResults(query: string): Promise<SearchResult[]> {
+async function searchResults(query: string): Promise<SearchResult[] | null> {
     return [
         {
             title: 'Demo', // (STRING) REQUIRED -> Title of the Series/Movie
@@ -8,7 +8,7 @@ async function searchResults(query: string): Promise<SearchResult[]> {
     ]
 }
 
-async function extractDetails(href: string): Promise<ExtractedDetails> {
+async function extractDetails(href: string): Promise<ExtractedDetails | null> {
     return {
         description: 'Demo Description', // (STRING/NULL) OPTIONAL
         aliases: ['alias1', 'alias2'], // (STRINGARRAY/NULL) OPTIONAL
@@ -16,7 +16,7 @@ async function extractDetails(href: string): Promise<ExtractedDetails> {
     }
 }
 
-async function extractEpisodes(href: string): Promise<ExtractedEpisode[]> {
+async function extractEpisodes(href: string): Promise<ExtractedEpisode[] | null> {
     return [
         {
             number: 1, // (INT) REQUIRED -> if movie 0 otherwise episode number
@@ -25,6 +25,6 @@ async function extractEpisodes(href: string): Promise<ExtractedEpisode[]> {
     ]
 }
 
-async function extractStreamUrl(href: string): Promise<ExtractedStreamUrl> {
+async function extractStreamUrl(href: string): Promise<ExtractedStreamUrl | null> {
     return 'https://demo.demo/s/1/1/stream.m3u8' // (STRING) REQUIRED -> M3U8 Playlist or MP4 Url
 }
