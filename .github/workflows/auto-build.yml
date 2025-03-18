@@ -65,4 +65,3 @@ jobs:
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   commit_message: 'Auto build: Updated built JS files'
-                  file_pattern: '**/*.js'
