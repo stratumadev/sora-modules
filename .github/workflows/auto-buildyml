@@ -2,8 +2,9 @@ name: Build and Push Built Files
 
 on:
   push:
+  pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
