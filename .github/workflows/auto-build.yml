@@ -1,46 +1,68 @@
-name: Build and Push Built Files
+name: CI Checks and Build
 
 on:
-  push:
-  pull_request:
-    branches:
-      - main
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    ci_checks:
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+            - name: Install Bun
+              run: |
+                  curl -fsSL https://bun.sh/install | bash
+                  echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
-      - name: Install Bun
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+            - name: Bun install
+              run: bun install
 
-      - name: Bun install
-        run: bun install
+            - name: Clean generated JS files
+              run: bun run clean
 
-      - name: Clean generated JS files
-        run: bun run clean
+            - name: Format code
+              run: bun run format
 
-      - name: Format code
-        run: bun run format
+            - name: Typecheck code
+              run: bun run typecheck
 
-      - name: Typecheck code
-        run: bun run typecheck
+    build:
+        if: github.event_name == 'push'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Build code
-        run: bun run build
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 20
 
-      - name: Commit built files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Auto build: Updated built JS files"
+            - name: Install Bun
+              run: |
+                  curl -fsSL https://bun.sh/install | bash
+                  echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+            - name: Bun install
+              run: bun install
+
+            - name: Build code
+              run: bun run build
+
+            - name: Commit built files
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: 'Auto build: Updated built JS files'
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
