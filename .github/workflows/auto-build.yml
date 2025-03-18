@@ -42,8 +42,6 @@ jobs:
         run: bun run build
 
       - name: Commit built files
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Auto build: Updated built JS files"
-          commit_user_name: "github-actions"
-          commit_user_email: "github-actions@github.com"
