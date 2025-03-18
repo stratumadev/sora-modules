@@ -16,7 +16,8 @@ async function compileTsFiles() {
                 bundle: false,
                 platform: 'node',
                 sourcemap: false,
-                target: 'es2020'
+                target: 'es2020',
+                minify: true
             })
         } catch (error) {
             console.error(`Error compiling ${file}:`, error)
