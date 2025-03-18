@@ -1,0 +1,19 @@
+{
+    "name": "sora-modules",
+    "private": true,
+    "scripts": {
+        "format": "prettier --write '**/*.{ts,json}'",
+        "build": "bun run build.mjs",
+        "clean": "bun run clean.mjs",
+        "typecheck": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "esbuild": "^0.25.1",
+        "fast-glob": "^3.3.3",
+        "prettier": "^3.5.3"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}

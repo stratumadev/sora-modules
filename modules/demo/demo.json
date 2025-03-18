@@ -1,0 +1,15 @@
+{
+    "sourceName": "Demo",
+    "iconUrl": "Demo",
+    "author": {
+        "name": "Demo",
+        "icon": "Demo"
+    },
+    "version": "1.0.0",
+    "language": "English",
+    "streamType": "MP4",
+    "quality": "1080p",
+    "baseUrl": "Demo",
+    "searchBaseUrl": "Demo",
+    "scriptUrl": "Demo"
+}
