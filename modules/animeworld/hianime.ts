@@ -14,7 +14,7 @@ async function searchResults(query: string): Promise<SearchResult[] | null> {
         }))
     } catch (error) {
         console.log('Fetch error:', error)
-        return null
+        return null // Maybe Sora accepts also null?
     }
 }
 
