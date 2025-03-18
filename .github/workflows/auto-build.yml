@@ -3,10 +3,10 @@ name: CI Checks and Build
 on:
     pull_request:
         branches:
-            - main
+            - master
     push:
         branches:
-            - main
+            - master
 
 jobs:
     ci_checks:
@@ -61,8 +61,8 @@ jobs:
             - name: Build code
               run: bun run build
 
-            - name: Force add built JS files
-              run: git add -f **/*.js
+            - name: Force add built JS files from modules folder
+              run: git add -f modules/**/*.js
 
             - name: Commit built files
               uses: stefanzweifel/git-auto-commit-action@v5
