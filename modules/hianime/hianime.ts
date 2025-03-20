@@ -10,22 +10,17 @@ async function searchResults(query: string): Promise<SearchResult[] | null> {
         return data.data.animes.map((anime) => ({
             title: anime.name,
             image: anime.poster,
-            href: `https://hianime.to/watch/${anime.id}`
+            href: String(anime.id) // Not sure what the API returns, lets just be 100% sure
         }))
     } catch (error) {
         console.log('Fetch error:', error)
-        return null // Maybe Sora accepts also null?
+        return null
     }
 }
 
-async function extractDetails(href: string): Promise<ExtractedDetails | null> {
+async function extractDetails(query: string): Promise<ExtractedDetails | null> {
     try {
-        const match = href.match(/https:\/\/hianime\.to\/watch\/(.+)$/)
-        if (!match) throw Error('No match found')
-
-        const encodedID = match[1]
-
-        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${encodedID}`)
+        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}`)
         const data: HiAnimeExtractedDetails = await response.json()
         if (!data) throw Error('Failed to get data from endpoint')
 
@@ -33,9 +28,9 @@ async function extractDetails(href: string): Promise<ExtractedDetails | null> {
         const moreInfo = data.data.anime.moreInfo
 
         return {
-            description: animeInfo.description ?? 'No description available', // JUST DO NULL IF THERE IS NO DESCRIPTION, saves alot of code
-            aliases: [`Duration: ${animeInfo.stats?.duration ?? 'Unknown'}`], // WTF??? SHOULD ONLY BE USED FOR ALIASES!!!!
-            airdate: `Aired: ${moreInfo?.aired ?? 'Unknown'}` // ONLY DATE PLEASE
+            description: animeInfo.description ?? null,
+            aliases: null,
+            airdate: moreInfo && moreInfo.aired ? moreInfo.aired : null
         }
     } catch (error) {
         console.log('Details error:', error)
@@ -43,18 +38,14 @@ async function extractDetails(href: string): Promise<ExtractedDetails | null> {
     }
 }
 
-async function extractEpisodes(href: string): Promise<ExtractedEpisode[] | null> {
+async function extractEpisodes(query: string): Promise<ExtractedEpisode[] | null> {
     try {
-        const match = href.match(/https:\/\/hianime\.to\/watch\/(.+)$/)
-        if (!match) throw Error('No match found')
-
-        const encodedID = match[1]
-        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${encodedID}/episodes`)
+        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}/episodes`)
         const data: HiAnimeExtractedEpisode = await response.json()
         if (!data) throw Error('Failed to get data from endpoint')
 
         return data.data.episodes.map((episode) => ({
-            href: `https://hianime.to/watch/${encodedID}?ep=${episode.episodeId.split('?ep=')[1]}`,
+            href: episode.episodeId.split('?ep=')[1],
             number: episode.number
         }))
     } catch (error) {
@@ -63,13 +54,9 @@ async function extractEpisodes(href: string): Promise<ExtractedEpisode[] | null>
     }
 }
 
-async function extractStreamUrl(href: string): Promise<ExtractedStreamUrl | null> {
+async function extractStreamUrl(query: string): Promise<ExtractedStreamUrl | null> {
     try {
-        const match = href.match(/https:\/\/hianime\.to\/watch\/(.+)$/)
-        if (!match) throw Error('No match found')
-
-        const encodedID = match[1]
-        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${encodedID}&category=dub`)
+        const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${query}&category=dub`)
         const data: HiAnimeExtractedStreamUrl = await response.json()
 
         const hlsSource = data.data.sources.find((source) => source.type === 'hls')
