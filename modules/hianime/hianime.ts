@@ -1,6 +1,6 @@
 import type { HiAnimeExtractedDetails, HiAnimeExtractedEpisode, HiAnimeExtractedStreamUrl, HiAnimeSearchResult } from './types'
 
-async function searchResults(query: string): Promise<SearchResult[] | null> {
+export async function searchResults(query: string): Promise<SearchResult[] | null> {
     try {
         const encodedKeyword = encodeURIComponent(query)
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/search?q=${encodedKeyword}&language=dub`)
@@ -18,7 +18,7 @@ async function searchResults(query: string): Promise<SearchResult[] | null> {
     }
 }
 
-async function extractDetails(query: string): Promise<ExtractedDetails | null> {
+export async function extractDetails(query: string): Promise<ExtractedDetails | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}`)
         const data: HiAnimeExtractedDetails = await response.json()
@@ -38,7 +38,7 @@ async function extractDetails(query: string): Promise<ExtractedDetails | null> {
     }
 }
 
-async function extractEpisodes(query: string): Promise<ExtractedEpisode[] | null> {
+export async function extractEpisodes(query: string): Promise<ExtractedEpisode[] | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}/episodes`)
         const data: HiAnimeExtractedEpisode = await response.json()
@@ -54,7 +54,7 @@ async function extractEpisodes(query: string): Promise<ExtractedEpisode[] | null
     }
 }
 
-async function extractStreamUrl(query: string): Promise<ExtractedStreamUrl | null> {
+export async function extractStreamUrl(query: string): Promise<ExtractedStreamUrl | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${query}&category=dub`)
         const data: HiAnimeExtractedStreamUrl = await response.json()
