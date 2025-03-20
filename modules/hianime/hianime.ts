@@ -4,6 +4,8 @@ export async function searchResults(query: string): Promise<SearchResult[] | nul
     try {
         const encodedKeyword = encodeURIComponent(query)
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/search?q=${encodedKeyword}&language=dub`)
+        if (!response || !response.ok) throw Error('Failed to get data from endpoint')
+
         const data: HiAnimeSearchResult = await response.json()
         if (!data) throw Error('Failed to get data from endpoint')
 
@@ -21,6 +23,8 @@ export async function searchResults(query: string): Promise<SearchResult[] | nul
 export async function extractDetails(query: string): Promise<ExtractedDetails | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}`)
+        if (!response || !response.ok) throw Error('Failed to get data from endpoint')
+
         const data: HiAnimeExtractedDetails = await response.json()
         if (!data) throw Error('Failed to get data from endpoint')
 
@@ -41,6 +45,8 @@ export async function extractDetails(query: string): Promise<ExtractedDetails | 
 export async function extractEpisodes(query: string): Promise<ExtractedEpisode[] | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/anime/${query}/episodes`)
+        if (!response || !response.ok) throw Error('Failed to get data from endpoint')
+
         const data: HiAnimeExtractedEpisode = await response.json()
         if (!data) throw Error('Failed to get data from endpoint')
 
@@ -57,7 +63,10 @@ export async function extractEpisodes(query: string): Promise<ExtractedEpisode[]
 export async function extractStreamUrl(query: string): Promise<ExtractedStreamUrl | null> {
     try {
         const response = await fetch(`https://bshar1865-hianime.vercel.app/api/v2/hianime/episode/sources?animeEpisodeId=${query}&category=dub`)
+        if (!response || !response.ok) throw Error('Failed to get data from endpoint')
+
         const data: HiAnimeExtractedStreamUrl = await response.json()
+        if (!data) throw Error('Failed to get data from endpoint')
 
         const hlsSource = data.data.sources.find((source) => source.type === 'hls')
         if (!hlsSource) throw Error('No streaming source found')
