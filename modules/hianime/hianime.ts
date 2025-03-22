@@ -7,7 +7,7 @@ export async function searchResults(query: string): Promise<SearchResult[] | nul
         if (!response || !response.ok) throw Error('Failed to get data from endpoint')
 
         const data: HiAnimeSearchResult = await response.json()
-        if (!data) throw Error('Failed to get data from endpoint')
+        if (!data || !data.success) throw Error('Failed to get data from endpoint')
 
         return data.data.animes.map((anime) => ({
             title: anime.name,
@@ -26,7 +26,7 @@ export async function extractDetails(query: string): Promise<ExtractedDetails | 
         if (!response || !response.ok) throw Error('Failed to get data from endpoint')
 
         const data: HiAnimeExtractedDetails = await response.json()
-        if (!data) throw Error('Failed to get data from endpoint')
+        if (!data || !data.success) throw Error('Failed to get data from endpoint')
 
         const animeInfo = data.data.anime.info
         const moreInfo = data.data.anime.moreInfo
@@ -48,7 +48,7 @@ export async function extractEpisodes(query: string): Promise<ExtractedEpisode[]
         if (!response || !response.ok) throw Error('Failed to get data from endpoint')
 
         const data: HiAnimeExtractedEpisode = await response.json()
-        if (!data) throw Error('Failed to get data from endpoint')
+        if (!data || !data.success) throw Error('Failed to get data from endpoint')
 
         return data.data.episodes.map((episode) => ({
             href: episode.episodeId,
@@ -66,7 +66,7 @@ export async function extractStreamUrl(query: string): Promise<ExtractedStreamUr
         if (!response || !response.ok) throw Error('Failed to get data from endpoint')
 
         const data: HiAnimeExtractedStreamUrl = await response.json()
-        if (!data) throw Error('Failed to get data from endpoint')
+        if (!data || !data.success) throw Error('Failed to get data from endpoint')
 
         const hlsSource = data.data.sources.find((source) => source.type === 'hls')
         if (!hlsSource) throw Error('No streaming source found')
