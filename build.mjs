@@ -14,6 +14,7 @@ async function compileTsFiles() {
                 entryPoints: [file],
                 outfile,
                 bundle: false,
+                format: 'esm',
                 platform: 'node',
                 sourcemap: false,
                 target: 'es2020',
