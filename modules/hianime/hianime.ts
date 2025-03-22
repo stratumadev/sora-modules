@@ -12,7 +12,7 @@ export async function searchResults(query: string): Promise<SearchResult[] | nul
         return data.data.animes.map((anime) => ({
             title: anime.name,
             image: anime.poster,
-            href: String(anime.id) // Not sure what the API returns, lets just be 100% sure
+            href: anime.id
         }))
     } catch (error) {
         console.log('Fetch error:', error)
