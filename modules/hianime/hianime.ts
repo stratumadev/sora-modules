@@ -51,7 +51,7 @@ export async function extractEpisodes(query: string): Promise<ExtractedEpisode[]
         if (!data) throw Error('Failed to get data from endpoint')
 
         return data.data.episodes.map((episode) => ({
-            href: episode.episodeId.split('?ep=')[1],
+            href: episode.episodeId,
             number: episode.number
         }))
     } catch (error) {
